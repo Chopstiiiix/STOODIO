@@ -41,6 +41,19 @@ enum BookingPolicy {
   STRICT
 }
 
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
 model Property {
   id              String         @id @default(cuid())
   type            PropertyType   @default(STUDIO)
@@ -74,16 +87,19 @@ model Property {
 }
 
 model Booking {
-  id            String   @id @default(cuid())
+  id            String        @id @default(cuid())
   userId        String
   propertyId    String
   startDate     DateTime
   endDate       DateTime
   totalPrice    Int
-  createdAt     DateTime @default(now())
+  status        BookingStatus @default(PENDING)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
 
-  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  property      Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  property      Property      @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  payment       Payment?
 
   @@index([userId])
   @@index([propertyId])
@@ -131,4 +147,20 @@ model AvailabilityException {
   property    Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 
   @@index([propertyId])
+}
+
+model Payment {
+  id                String        @id @default(cuid())
+  bookingId         String        @unique
+  stripePaymentIntentId String?   @unique
+  amount            Int
+  currency          String        @default("NGN")
+  status            PaymentStatus @default(PENDING)
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+
+  booking           Booking       @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  @@index([bookingId])
+  @@index([stripePaymentIntentId])
 }

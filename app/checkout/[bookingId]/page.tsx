@@ -3,16 +3,17 @@ import { getCurrentUser } from "@/actions/auth";
 import { getBookings } from "@/actions/bookings";
 import Container from "@/components/Container";
 import Link from "next/link";
-import { CheckCircle, Calendar, Clock, CreditCard } from "lucide-react";
+import { Calendar, Clock, MapPin } from "lucide-react";
+import StripeCheckoutWrapper from "./StripeCheckoutWrapper";
 
 interface IParams {
   bookingId: string;
 }
 
 export default async function CheckoutPage({
-  params
+  params,
 }: {
-  params: Promise<IParams>
+  params: Promise<IParams>;
 }) {
   const { bookingId } = await params;
   const currentUser = await getCurrentUser();
@@ -33,7 +34,8 @@ export default async function CheckoutPage({
             Booking Not Found
           </h1>
           <p className="text-gray-600 mb-8">
-            The booking you're looking for doesn't exist or you don't have access to it.
+            The booking you're looking for doesn't exist or you don't have
+            access to it.
           </p>
           <Link
             href="/"
@@ -54,160 +56,134 @@ export default async function CheckoutPage({
 
   return (
     <Container>
-      <div className="max-w-3xl mx-auto py-8">
-        {/* Success Header */}
-        <div className="bg-green-50 border-2 border-green-200 rounded-lg p-6 mb-8 text-center">
-          <div className="flex justify-center mb-4">
-            <CheckCircle size={64} className="text-green-600" />
-          </div>
+      <div className="max-w-4xl mx-auto py-8">
+        <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Booking Confirmed!
+            Complete Your Booking
           </h1>
-          <p className="text-gray-700">
-            Your booking has been successfully created. Here are the details:
-          </p>
+          <p className="text-gray-600">Review your booking and pay securely</p>
         </div>
 
-        {/* Booking Details */}
-        <div className="bg-white border-2 border-gray-200 rounded-lg p-8 mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            Booking Details
-          </h2>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Booking Summary */}
+          <div className="bg-white border-2 border-gray-200 rounded-lg p-6">
+            <h2 className="text-xl font-bold text-gray-900 mb-6">
+              Booking Summary
+            </h2>
 
-          <div className="space-y-6">
-            {/* Property Info */}
-            <div>
-              <h3 className="text-sm font-semibold text-gray-700 mb-2">
-                Property
-              </h3>
-              <p className="text-lg font-medium text-gray-900">
-                {booking.property.title}
-              </p>
-              <p className="text-gray-600">{booking.property.locationValue}</p>
-            </div>
-
-            {/* Date & Time */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-4">
+              {/* Property Info */}
               <div>
-                <h3 className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
-                  <Calendar size={16} />
-                  Start Time
+                <h3 className="text-sm font-semibold text-gray-700 mb-1">
+                  Property
                 </h3>
-                <p className="text-gray-900">
-                  {startDate.toLocaleDateString("en-NG", {
-                    weekday: "long",
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
+                <p className="text-gray-900 font-medium">
+                  {booking.property.title}
                 </p>
-                <p className="text-gray-600">
-                  {startDate.toLocaleTimeString("en-NG", {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
+                {booking.property.locationValue && (
+                  <div className="flex items-center gap-1 text-sm text-gray-600 mt-1">
+                    <MapPin size={14} />
+                    <span>{booking.property.locationValue}</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Dates */}
+              <div className="grid grid-cols-2 gap-4 pt-4 border-t">
+                <div>
+                  <div className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-1">
+                    <Calendar size={14} />
+                    Start
+                  </div>
+                  <p className="text-sm text-gray-900">
+                    {startDate.toLocaleDateString("en-NG", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    })}
+                  </p>
+                  <p className="text-xs text-gray-600">
+                    {startDate.toLocaleTimeString("en-NG", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </p>
+                </div>
+
+                <div>
+                  <div className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-1">
+                    <Calendar size={14} />
+                    End
+                  </div>
+                  <p className="text-sm text-gray-900">
+                    {endDate.toLocaleDateString("en-NG", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    })}
+                  </p>
+                  <p className="text-xs text-gray-600">
+                    {endDate.toLocaleTimeString("en-NG", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </p>
+                </div>
+              </div>
+
+              {/* Duration */}
+              <div className="pt-4 border-t">
+                <div className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-1">
+                  <Clock size={14} />
+                  Duration
+                </div>
+                <p className="text-gray-900">
+                  {durationHours} {durationHours === 1 ? "hour" : "hours"}
                 </p>
               </div>
 
-              <div>
-                <h3 className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
-                  <Calendar size={16} />
-                  End Time
-                </h3>
-                <p className="text-gray-900">
-                  {endDate.toLocaleDateString("en-NG", {
-                    weekday: "long",
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
-                </p>
-                <p className="text-gray-600">
-                  {endDate.toLocaleTimeString("en-NG", {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </p>
+              {/* Price Breakdown */}
+              <div className="pt-4 border-t space-y-2">
+                <div className="flex justify-between text-sm text-gray-700">
+                  <span>
+                    {booking.property.currency || "NGN"}{" "}
+                    {((booking.property.price || 0) / 100).toLocaleString("en-NG", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}{" "}
+                    × {durationHours} {durationHours === 1 ? "hour" : "hours"}
+                  </span>
+                  <span className="font-medium">
+                    {booking.property.currency || "NGN"}{" "}
+                    {(booking.totalPrice / 100).toLocaleString("en-NG", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
+                  </span>
+                </div>
+
+                <div className="flex justify-between text-lg font-bold text-gray-900 pt-2 border-t">
+                  <span>Total</span>
+                  <span>
+                    {booking.property.currency || "NGN"}{" "}
+                    {(booking.totalPrice / 100).toLocaleString("en-NG", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
+                  </span>
+                </div>
               </div>
             </div>
-
-            {/* Duration */}
-            <div>
-              <h3 className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
-                <Clock size={16} />
-                Duration
-              </h3>
-              <p className="text-gray-900">
-                {durationHours} {durationHours === 1 ? "hour" : "hours"}
-              </p>
-            </div>
-
-            {/* Booking ID */}
-            <div>
-              <h3 className="text-sm font-semibold text-gray-700 mb-2">
-                Booking Reference
-              </h3>
-              <p className="text-gray-900 font-mono text-sm">{booking.id}</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Payment Summary */}
-        <div className="bg-white border-2 border-gray-200 rounded-lg p-8 mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-            <CreditCard size={24} />
-            Payment Summary
-          </h2>
-
-          <div className="space-y-3">
-            <div className="flex justify-between text-gray-700">
-              <span>Rate per hour:</span>
-              <span className="font-medium">
-                NGN {((booking.property.price || 0) / 100).toLocaleString("en-NG", {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}
-              </span>
-            </div>
-            <div className="flex justify-between text-gray-700">
-              <span>Duration:</span>
-              <span className="font-medium">{durationHours} hours</span>
-            </div>
-            <hr className="my-4" />
-            <div className="flex justify-between text-xl font-bold text-gray-900">
-              <span>Total:</span>
-              <span>
-                NGN {(booking.totalPrice / 100).toLocaleString("en-NG", {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}
-              </span>
-            </div>
           </div>
 
-          <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-            <p className="text-sm text-blue-900">
-              <strong>Note:</strong> This is a booking confirmation. Payment processing
-              will be implemented in a future update. For now, please contact the host
-              directly to arrange payment.
-            </p>
+          {/* Payment Form */}
+          <div>
+            <StripeCheckoutWrapper
+              bookingId={booking.id}
+              amount={booking.totalPrice}
+              currency={booking.property.currency || "NGN"}
+            />
           </div>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4">
-          <Link
-            href="/dashboard/bookings"
-            className="flex-1 px-6 py-3 bg-gray-200 text-gray-900 text-center rounded-lg font-semibold hover:bg-gray-300 transition"
-          >
-            View My Bookings
-          </Link>
-          <Link
-            href="/"
-            className="flex-1 px-6 py-3 bg-blue-600 text-white text-center rounded-lg font-semibold hover:bg-blue-700 transition"
-          >
-            Browse More Listings
-          </Link>
         </div>
       </div>
     </Container>
