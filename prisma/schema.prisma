@@ -29,6 +29,7 @@ model User {
   properties    Property[]
   bookings      Booking[]
   reviews       Review[]
+  sentMessages  Message[]
 }
 
 enum PropertyType {
@@ -110,6 +111,7 @@ model Booking {
   property      Property      @relation(fields: [propertyId], references: [id], onDelete: Cascade)
   payment       Payment?
   payout        Payout?
+  messages      Message[]
 
   @@index([userId])
   @@index([propertyId])
@@ -197,4 +199,18 @@ model Payout {
   @@index([paymentId])
   @@index([hostUserId])
   @@index([stripeTransferId])
+}
+
+model Message {
+  id          String   @id @default(cuid())
+  bookingId   String
+  senderId    String
+  content     String
+  createdAt   DateTime @default(now())
+
+  booking     Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  sender      User     @relation(fields: [senderId], references: [id], onDelete: Cascade)
+
+  @@index([bookingId])
+  @@index([senderId])
 }
