@@ -129,6 +129,12 @@ export default async function HostListingsPage() {
                 </div>
                 <div className="flex gap-2 ml-4">
                   <Link
+                    href={`/dashboard/host/listings/${listing.id}/availability`}
+                    className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 border border-gray-300 rounded-lg hover:bg-gray-50 transition"
+                  >
+                    Availability
+                  </Link>
+                  <Link
                     href={`/dashboard/host/listings/${listing.id}/edit`}
                     className="px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 border border-blue-600 rounded-lg hover:bg-blue-50 transition"
                   >
