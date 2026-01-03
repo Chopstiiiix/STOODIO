@@ -22,6 +22,7 @@ model User {
   hashedPassword String?
   userType      String?   // "host" or "guest"
   studioType    String?   // "Music", "Podcast", "Photo", "Make up" (only for hosts)
+  stripeAccountId String? @unique  // Stripe Connect account ID for hosts
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
@@ -44,6 +45,7 @@ enum BookingPolicy {
 enum BookingStatus {
   PENDING
   CONFIRMED
+  COMPLETED
   CANCELLED
 }
 
@@ -52,6 +54,13 @@ enum PaymentStatus {
   PAID
   FAILED
   REFUNDED
+}
+
+enum PayoutStatus {
+  PENDING
+  PROCESSING
+  PAID
+  FAILED
 }
 
 model Property {
@@ -100,6 +109,7 @@ model Booking {
   user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   property      Property      @relation(fields: [propertyId], references: [id], onDelete: Cascade)
   payment       Payment?
+  payout        Payout?
 
   @@index([userId])
   @@index([propertyId])
@@ -160,7 +170,31 @@ model Payment {
   updatedAt         DateTime      @updatedAt
 
   booking           Booking       @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  payout            Payout?
 
   @@index([bookingId])
   @@index([stripePaymentIntentId])
+}
+
+model Payout {
+  id                String        @id @default(cuid())
+  bookingId         String        @unique
+  paymentId         String        @unique
+  hostUserId        String
+  amount            Int           // Total booking amount
+  platformFee       Int           // Platform fee (10%)
+  hostAmount        Int           // Amount paid to host (amount - platformFee)
+  currency          String        @default("NGN")
+  stripeTransferId  String?       @unique
+  status            PayoutStatus  @default(PENDING)
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+
+  booking           Booking       @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  payment           Payment       @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+
+  @@index([bookingId])
+  @@index([paymentId])
+  @@index([hostUserId])
+  @@index([stripeTransferId])
 }
