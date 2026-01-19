@@ -32,21 +32,7 @@ const Search = () => {
             px-6
           "
         >
-          Anywhere
-        </div>
-        <div
-          className="
-            hidden
-            sm:block
-            text-sm
-            font-semibold
-            px-6
-            border-x-[1px]
-            flex-1
-            text-center
-          "
-        >
-          Any Week
+          Search studios and locations
         </div>
         <div
           className="
@@ -60,7 +46,6 @@ const Search = () => {
             gap-3
           "
         >
-          <div className="hidden sm:block">Add Guests</div>
           <div
             className="
               p-2

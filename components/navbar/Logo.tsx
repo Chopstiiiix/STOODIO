@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Home } from "lucide-react";
+import Image from "next/image";
 
 const Logo = () => {
   const router = useRouter();
@@ -9,12 +9,16 @@ const Logo = () => {
   return (
     <div
       onClick={() => router.push("/")}
-      className="flex items-center gap-2 cursor-pointer"
+      className="cursor-pointer"
     >
-      <Home className="text-primary" size={32} />
-      <span className="hidden md:block text-xl font-bold text-primary">
-        Stoodio
-      </span>
+      <Image
+        src="/stoodio-logo.png"
+        alt="Stoodio"
+        width={180}
+        height={60}
+        className="object-contain"
+        priority
+      />
     </div>
   );
 };
