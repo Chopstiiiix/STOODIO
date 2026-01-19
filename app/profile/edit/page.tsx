@@ -34,7 +34,7 @@ export default function EditProfilePage() {
     reset,
     watch,
   } = useForm<FieldValues>({
-    resolver: zodResolver(profileSchema),
+    resolver: zodResolver(profileSchema) as any,
     defaultValues: {
       name: "",
       userType: undefined,

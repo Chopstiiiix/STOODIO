@@ -6,9 +6,10 @@ import prismadb from "@/lib/prisma";
 // PATCH /api/bookings/[id]/complete - Mark booking as completed
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
 
     if (!session?.user?.email) {
@@ -31,7 +32,7 @@ export async function PATCH(
 
     // Fetch the booking with property details
     const booking = await prismadb.booking.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         property: true,
       },
@@ -62,7 +63,7 @@ export async function PATCH(
 
     // Update booking status to COMPLETED
     const updatedBooking = await prismadb.booking.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         status: "COMPLETED",
       },

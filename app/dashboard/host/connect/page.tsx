@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { CheckCircle, XCircle, Loader2, AlertCircle } from "lucide-react";
@@ -18,7 +18,7 @@ interface ConnectStatus {
   };
 }
 
-export default function ConnectPage() {
+function ConnectPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [status, setStatus] = useState<ConnectStatus | null>(null);
@@ -34,11 +34,12 @@ export default function ConnectPage() {
       // Remove query params
       router.replace("/dashboard/host/connect");
     } else if (refresh) {
-      toast.info("Please complete the onboarding process");
+      toast("Please complete the onboarding process");
       router.replace("/dashboard/host/connect");
     }
 
     fetchStatus();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchStatus = async () => {
@@ -259,5 +260,22 @@ export default function ConnectPage() {
         </div>
       </div>
     </Container>
+  );
+}
+
+export default function ConnectPage() {
+  return (
+    <Suspense
+      fallback={
+        <Container>
+          <div className="max-w-2xl mx-auto py-16 text-center">
+            <Loader2 className="animate-spin h-12 w-12 mx-auto text-blue-600 mb-4" />
+            <p className="text-gray-600">Loading...</p>
+          </div>
+        </Container>
+      }
+    >
+      <ConnectPageContent />
+    </Suspense>
   );
 }

@@ -75,18 +75,20 @@ async function getHostDashboardData(userId: string) {
 
   const totalBookings = bookings.length;
   const pendingBookings = bookings.filter((b) => b.status === "PENDING").length;
-  const confirmedBookings = bookings.filter(
+  const confirmedBookingsArray = bookings.filter(
     (b) => b.status === "CONFIRMED"
-  ).length;
-  const completedBookings = bookings.filter(
+  );
+  const confirmedBookings = confirmedBookingsArray.length;
+  const completedBookingsArray = bookings.filter(
     (b) => b.status === "COMPLETED"
-  ).length;
+  );
+  const completedBookings = completedBookingsArray.length;
 
-  const totalRevenue = completedBookings.reduce(
+  const totalRevenue = completedBookingsArray.reduce(
     (sum, b) => sum + b.totalPrice,
     0
   );
-  const pendingRevenue = confirmedBookings.reduce(
+  const pendingRevenue = confirmedBookingsArray.reduce(
     (sum, b) => sum + b.totalPrice,
     0
   );

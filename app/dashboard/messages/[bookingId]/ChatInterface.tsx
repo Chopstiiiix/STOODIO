@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { format } from "date-fns";
 import toast from "react-hot-toast";
 import { Send, ArrowLeft, Calendar, MapPin, Loader2 } from "lucide-react";
+import Image from "next/image";
 import Container from "@/components/Container";
 
 interface Message {
@@ -88,6 +89,7 @@ export default function ChatInterface({
 
   useEffect(() => {
     fetchMessages();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bookingId]);
 
   // Scroll to bottom when messages change
@@ -154,11 +156,12 @@ export default function ChatInterface({
 
               {/* Property Image */}
               {booking.propertyImage && (
-                <div className="w-full h-40 rounded-lg overflow-hidden bg-gray-200 mb-4">
-                  <img
+                <div className="w-full h-40 rounded-lg overflow-hidden bg-gray-200 mb-4 relative">
+                  <Image
                     src={booking.propertyImage}
                     alt={booking.propertyTitle}
-                    className="w-full h-full object-cover"
+                    fill
+                    className="object-cover"
                   />
                 </div>
               )}
@@ -217,10 +220,12 @@ export default function ChatInterface({
                 </p>
                 <div className="flex items-center gap-3">
                   {otherParty.image ? (
-                    <img
+                    <Image
                       src={otherParty.image}
                       alt={otherParty.name || "User"}
-                      className="w-10 h-10 rounded-full"
+                      width={40}
+                      height={40}
+                      className="rounded-full"
                     />
                   ) : (
                     <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 font-semibold">

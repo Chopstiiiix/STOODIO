@@ -21,12 +21,13 @@ const updateListingSchema = z.object({
 // GET /api/listings/[id] - Get a single listing
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const listing = await prismadb.property.findUnique({
       where: {
-        id: params.id,
+        id,
       },
       include: {
         user: {
@@ -69,9 +70,10 @@ export async function GET(
 // PATCH /api/listings/[id] - Update a listing
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
 
     if (!session?.user?.email) {
@@ -97,7 +99,7 @@ export async function PATCH(
     // Check if listing exists and belongs to user
     const existingListing = await prismadb.property.findUnique({
       where: {
-        id: params.id,
+        id,
       },
     });
 
@@ -142,7 +144,7 @@ export async function PATCH(
 
     const listing = await prismadb.property.update({
       where: {
-        id: params.id,
+        id,
       },
       data: updateData,
       include: {

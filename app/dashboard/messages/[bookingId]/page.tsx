@@ -50,22 +50,23 @@ async function getBookingDetails(bookingId: string, userId: string) {
       email: booking.property.user.email,
       image: booking.property.user.image,
     },
-    role: isGuest ? "guest" : "host",
+    role: (isGuest ? "guest" : "host") as "guest" | "host",
   };
 }
 
 export default async function ChatPage({
   params,
 }: {
-  params: { bookingId: string };
+  params: Promise<{ bookingId: string }>;
 }) {
+  const { bookingId } = await params;
   const currentUser = await getCurrentUser();
 
   if (!currentUser) {
     redirect("/login");
   }
 
-  const booking = await getBookingDetails(params.bookingId, currentUser.id);
+  const booking = await getBookingDetails(bookingId, currentUser.id);
 
   if (!booking) {
     redirect("/dashboard/messages");
@@ -73,7 +74,7 @@ export default async function ChatPage({
 
   return (
     <ChatInterface
-      bookingId={params.bookingId}
+      bookingId={bookingId}
       booking={booking}
       currentUserId={currentUser.id}
     />

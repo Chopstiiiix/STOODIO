@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { format } from "date-fns";
 import { MessageCircle, Calendar, MapPin } from "lucide-react";
 import { getCurrentUser } from "@/actions/auth";
@@ -16,6 +17,7 @@ async function getBookingsWithMessages(userId: string) {
           user: true, // Host
         },
       },
+      user: true, // Guest (current user in this case)
       messages: {
         take: 1,
         orderBy: { createdAt: "desc" },
@@ -116,11 +118,12 @@ export default async function MessagesPage() {
                 <div className="flex items-start gap-4">
                   {/* Property Image */}
                   {booking.propertyImage && (
-                    <div className="w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden bg-gray-200">
-                      <img
+                    <div className="w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden bg-gray-200 relative">
+                      <Image
                         src={booking.propertyImage}
                         alt={booking.propertyTitle}
-                        className="w-full h-full object-cover"
+                        fill
+                        className="object-cover"
                       />
                     </div>
                   )}

@@ -67,7 +67,7 @@ const PropertyCard = ({
               group-hover:scale-110
               transition
             "
-            src={data.imageSrc}
+            src={data.imageSrc || "/placeholder.jpg"}
             alt="Listing"
           />
           <div

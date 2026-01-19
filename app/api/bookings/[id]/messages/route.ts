@@ -6,9 +6,10 @@ import prismadb from "@/lib/prisma";
 // GET /api/bookings/[id]/messages - Get all messages for a booking
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
 
     if (!session?.user?.email) {
@@ -31,7 +32,7 @@ export async function GET(
 
     // Fetch booking with property to verify user access
     const booking = await prismadb.booking.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         property: true,
       },
@@ -57,7 +58,7 @@ export async function GET(
 
     // Fetch all messages for the booking
     const messages = await prismadb.message.findMany({
-      where: { bookingId: params.id },
+      where: { bookingId: id },
       include: {
         sender: {
           select: {

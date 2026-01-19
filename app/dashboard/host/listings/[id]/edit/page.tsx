@@ -17,10 +17,10 @@ const listingSchema = z.object({
   city: z.string().optional(),
   country: z.string().optional(),
   basePrice: z.coerce.number().int().positive("Price must be positive"),
-  currency: z.string().default("NGN"),
+  currency: z.string(),
   policy: z.enum(["FLEXIBLE", "MODERATE", "STRICT"]),
-  instantBook: z.boolean().default(false),
-  published: z.boolean().default(false),
+  instantBook: z.boolean(),
+  published: z.boolean(),
 });
 
 type ListingFormData = z.infer<typeof listingSchema>;
@@ -40,7 +40,7 @@ export default function EditListingPage() {
     formState: { errors },
     reset,
   } = useForm<FieldValues>({
-    resolver: zodResolver(listingSchema),
+    resolver: zodResolver(listingSchema) as any,
     defaultValues: {
       type: "STUDIO",
       title: "",
@@ -148,14 +148,13 @@ export default function EditListingPage() {
     setIsLoading(true);
 
     try {
-      const validatedData = listingSchema.parse(data);
 
       const res = await fetch(`/api/listings/${listingId}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(validatedData),
+        body: JSON.stringify(data),
       });
 
       const responseData = await res.json();

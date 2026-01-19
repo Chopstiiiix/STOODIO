@@ -38,9 +38,10 @@ const availabilitySchema = z.object({
 // GET /api/listings/[id]/availability - Get availability for a listing
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
 
     if (!session?.user?.email) {
@@ -56,7 +57,7 @@ export async function GET(
     }
 
     // Verify ownership
-    const isOwner = await verifyPropertyOwnership(params.id, currentUser.id);
+    const isOwner = await verifyPropertyOwnership(id, currentUser.id);
 
     if (!isOwner) {
       return NextResponse.json(
@@ -65,7 +66,7 @@ export async function GET(
       );
     }
 
-    const availability = await getPropertyAvailability(params.id);
+    const availability = await getPropertyAvailability(id);
 
     return NextResponse.json(availability);
   } catch (error) {
@@ -80,9 +81,10 @@ export async function GET(
 // POST /api/listings/[id]/availability - Replace weekly availability rules
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
 
     if (!session?.user?.email) {
@@ -98,7 +100,7 @@ export async function POST(
     }
 
     // Verify ownership
-    const isOwner = await verifyPropertyOwnership(params.id, currentUser.id);
+    const isOwner = await verifyPropertyOwnership(id, currentUser.id);
 
     if (!isOwner) {
       return NextResponse.json(
@@ -111,7 +113,7 @@ export async function POST(
     const validatedData = availabilitySchema.parse(body);
 
     const availability = await replaceWeeklyAvailability(
-      params.id,
+      id,
       validatedData.weeklyRules
     );
 

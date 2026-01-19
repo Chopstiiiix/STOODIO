@@ -145,12 +145,8 @@ export default async function SearchPage({
               <PropertyCard
                 key={property.id}
                 data={{
-                  id: property.id,
-                  title: property.title,
-                  locationValue: property.locationValue,
+                  ...property,
                   imageSrc: imageUrl,
-                  price: property.price,
-                  category: property.category,
                 }}
                 averageRating={averageRating}
                 reviewCount={property.reviews.length}

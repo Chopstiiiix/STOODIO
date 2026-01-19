@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Map, { Marker, NavigationControl } from "react-map-gl";
+import Map, { Marker, NavigationControl, ViewStateChangeEvent, MapMouseEvent } from "react-map-gl/mapbox";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { MapPin } from "lucide-react";
 
@@ -46,7 +46,7 @@ export default function MapComponent({
     });
   }, [center, zoom]);
 
-  const handleMapClick = (event: any) => {
+  const handleMapClick = (event: MapMouseEvent) => {
     if (!interactive || !onLocationSelect) return;
 
     const { lngLat } = event;
@@ -71,7 +71,7 @@ export default function MapComponent({
     <div className="w-full h-full rounded-lg overflow-hidden">
       <Map
         {...viewState}
-        onMove={(evt) => setViewState(evt.viewState)}
+        onMove={(evt: ViewStateChangeEvent) => setViewState(evt.viewState)}
         onClick={handleMapClick}
         mapStyle="mapbox://styles/mapbox/streets-v12"
         mapboxAccessToken={mapboxToken}

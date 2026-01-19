@@ -50,6 +50,7 @@ export default function AvailabilityPage() {
 
   useEffect(() => {
     fetchAvailability();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listingId]);
 
   const fetchAvailability = async () => {

@@ -26,9 +26,10 @@ const exceptionSchema = z.object({
 // POST /api/listings/[id]/availability/exceptions - Create an exception
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
 
     if (!session?.user?.email) {
@@ -44,7 +45,7 @@ export async function POST(
     }
 
     // Verify ownership
-    const isOwner = await verifyPropertyOwnership(params.id, currentUser.id);
+    const isOwner = await verifyPropertyOwnership(id, currentUser.id);
 
     if (!isOwner) {
       return NextResponse.json(
@@ -56,7 +57,7 @@ export async function POST(
     const body = await request.json();
     const validatedData = exceptionSchema.parse(body);
 
-    const exception = await createAvailabilityException(params.id, {
+    const exception = await createAvailabilityException(id, {
       startTime: new Date(validatedData.startTime),
       endTime: new Date(validatedData.endTime),
       reason: validatedData.reason,

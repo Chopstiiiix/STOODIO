@@ -87,6 +87,7 @@ export async function getProperties(filters: PropertyFilters = {}) {
     const safeProperties = properties.map((property) => ({
       ...property,
       createdAt: property.createdAt.toISOString(),
+      updatedAt: property.updatedAt.toISOString(),
     }));
 
     return safeProperties;

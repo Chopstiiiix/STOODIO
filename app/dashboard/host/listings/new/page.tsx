@@ -33,7 +33,7 @@ export default function NewListingPage() {
     handleSubmit,
     formState: { errors },
   } = useForm<FieldValues>({
-    resolver: zodResolver(listingSchema),
+    resolver: zodResolver(listingSchema) as any,
     defaultValues: {
       type: "STUDIO",
       title: "",

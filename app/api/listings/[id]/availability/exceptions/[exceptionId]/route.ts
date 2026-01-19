@@ -10,9 +10,10 @@ import prismadb from "@/lib/prisma";
 // DELETE /api/listings/[id]/availability/exceptions/[exceptionId] - Delete an exception
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string; exceptionId: string } }
+  { params }: { params: Promise<{ id: string; exceptionId: string }> }
 ) {
   try {
+    const { id, exceptionId } = await params;
     const session = await getServerSession(authOptions);
 
     if (!session?.user?.email) {
@@ -28,7 +29,7 @@ export async function DELETE(
     }
 
     // Verify ownership
-    const isOwner = await verifyPropertyOwnership(params.id, currentUser.id);
+    const isOwner = await verifyPropertyOwnership(id, currentUser.id);
 
     if (!isOwner) {
       return NextResponse.json(
@@ -39,7 +40,7 @@ export async function DELETE(
 
     // Verify the exception belongs to this property
     const exception = await prismadb.availabilityException.findUnique({
-      where: { id: params.exceptionId },
+      where: { id: exceptionId },
     });
 
     if (!exception) {
@@ -49,14 +50,14 @@ export async function DELETE(
       );
     }
 
-    if (exception.propertyId !== params.id) {
+    if (exception.propertyId !== id) {
       return NextResponse.json(
         { error: "Exception does not belong to this property" },
         { status: 400 }
       );
     }
 
-    await deleteAvailabilityException(params.exceptionId);
+    await deleteAvailabilityException(exceptionId);
 
     return NextResponse.json({ success: true });
   } catch (error) {

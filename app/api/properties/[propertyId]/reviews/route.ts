@@ -12,12 +12,13 @@ const reviewSchema = z.object({
 // GET /api/properties/[propertyId]/reviews - Get property reviews
 export async function GET(
   request: NextRequest,
-  { params }: { params: { propertyId: string } }
+  { params }: { params: Promise<{ propertyId: string }> }
 ) {
   try {
+    const { propertyId } = await params;
     const reviews = await prismadb.review.findMany({
       where: {
-        propertyId: params.propertyId,
+        propertyId,
       },
       include: {
         user: {
@@ -51,9 +52,10 @@ export async function GET(
 // POST /api/properties/[propertyId]/reviews - Create a review
 export async function POST(
   request: NextRequest,
-  { params }: { params: { propertyId: string } }
+  { params }: { params: Promise<{ propertyId: string }> }
 ) {
   try {
+    const { propertyId } = await params;
     const session = await getServerSession(authOptions);
 
     if (!session?.user?.email) {
@@ -70,7 +72,7 @@ export async function POST(
 
     // Check if property exists
     const property = await prismadb.property.findUnique({
-      where: { id: params.propertyId },
+      where: { id: propertyId },
     });
 
     if (!property) {
@@ -83,7 +85,7 @@ export async function POST(
     // Check if user has completed booking for this property
     const completedBooking = await prismadb.booking.findFirst({
       where: {
-        propertyId: params.propertyId,
+        propertyId,
         userId: currentUser.id,
         status: "COMPLETED",
       },
@@ -99,7 +101,7 @@ export async function POST(
     // Check if user already reviewed this property
     const existingReview = await prismadb.review.findFirst({
       where: {
-        propertyId: params.propertyId,
+        propertyId,
         userId: currentUser.id,
       },
     });
@@ -116,7 +118,7 @@ export async function POST(
 
     const review = await prismadb.review.create({
       data: {
-        propertyId: params.propertyId,
+        propertyId,
         userId: currentUser.id,
         rating: validatedData.rating,
         comment: validatedData.comment || "",

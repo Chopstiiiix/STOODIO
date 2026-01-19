@@ -34,7 +34,7 @@ export default async function CheckoutPage({
             Booking Not Found
           </h1>
           <p className="text-gray-600 mb-8">
-            The booking you're looking for doesn't exist or you don't have
+            The booking you&apos;re looking for doesn&apos;t exist or you don&apos;t have
             access to it.
           </p>
           <Link

@@ -6,9 +6,10 @@ import { authOptions } from "@/lib/auth";
 // POST /api/listings/[id]/images - Add images to a property
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
 
     if (!session?.user?.email) {
@@ -25,7 +26,7 @@ export async function POST(
 
     // Verify property ownership
     const property = await prismadb.property.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!property || property.userId !== currentUser.id) {
@@ -44,7 +45,7 @@ export async function POST(
 
     // Get current image count
     const currentImageCount = await prismadb.propertyImage.count({
-      where: { propertyId: params.id },
+      where: { propertyId: id },
     });
 
     // Create images with proper ordering
@@ -52,7 +53,7 @@ export async function POST(
       images.map((img, index) =>
         prismadb.propertyImage.create({
           data: {
-            propertyId: params.id,
+            propertyId: id,
             url: img.url,
             key: img.key,
             order: currentImageCount + index,
@@ -64,7 +65,7 @@ export async function POST(
     // Update property imageSrc to first image if not set
     if (!property.imageSrc && createdImages.length > 0) {
       await prismadb.property.update({
-        where: { id: params.id },
+        where: { id },
         data: { imageSrc: createdImages[0].url },
       });
     }
@@ -82,9 +83,10 @@ export async function POST(
 // DELETE /api/listings/[id]/images?key=... - Delete a property image
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
 
     if (!session?.user?.email) {
@@ -101,7 +103,7 @@ export async function DELETE(
 
     // Verify property ownership
     const property = await prismadb.property.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!property || property.userId !== currentUser.id) {
@@ -121,20 +123,20 @@ export async function DELETE(
     // Delete the image
     await prismadb.propertyImage.deleteMany({
       where: {
-        propertyId: params.id,
+        propertyId: id,
         key: key,
       },
     });
 
     // Update property imageSrc if it was the deleted image
     const remainingImages = await prismadb.propertyImage.findMany({
-      where: { propertyId: params.id },
+      where: { propertyId: id },
       orderBy: { order: "asc" },
     });
 
     if (property.imageSrc?.includes(key)) {
       await prismadb.property.update({
-        where: { id: params.id },
+        where: { id },
         data: { imageSrc: remainingImages[0]?.url || "" },
       });
     }
