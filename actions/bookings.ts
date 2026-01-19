@@ -63,7 +63,7 @@ export async function getBookings(params: {
       },
     });
 
-    const safeBookings = bookings.map((booking) => ({
+    const safeBookings = bookings.map((booking: typeof bookings[number]) => ({
       ...booking,
       createdAt: booking.createdAt.toISOString(),
       startDate: booking.startDate.toISOString(),
