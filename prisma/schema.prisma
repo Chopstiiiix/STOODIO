@@ -91,9 +91,23 @@ model Property {
   reviews         Review[]
   availability    Availability[]
   availabilityExceptions AvailabilityException[]
+  images          PropertyImage[]
 
   @@index([userId])
   @@index([published])
+}
+
+model PropertyImage {
+  id          String   @id @default(cuid())
+  propertyId  String
+  url         String
+  key         String   // UploadThing file key for deletion
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  property    Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@index([propertyId])
 }
 
 model Booking {

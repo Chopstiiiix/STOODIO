@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
 import { SafeProperty, SafeUser } from "@/types";
-import { Heart } from "lucide-react";
+import { Heart, Star } from "lucide-react";
 import Button from "../Button";
 
 interface PropertyCardProps {
@@ -14,6 +14,8 @@ interface PropertyCardProps {
   actionLabel?: string;
   actionId?: string;
   currentUser?: SafeUser | null;
+  averageRating?: number;
+  reviewCount?: number;
 }
 
 const PropertyCard = ({
@@ -23,6 +25,8 @@ const PropertyCard = ({
   actionLabel,
   actionId = "",
   currentUser,
+  averageRating,
+  reviewCount,
 }: PropertyCardProps) => {
   const router = useRouter();
 
@@ -76,11 +80,18 @@ const PropertyCard = ({
             <Heart size={28} className="fill-white/50 text-white" />
           </div>
         </div>
-        <div className="font-semibold text-lg">{data.locationValue}</div>
+        <div className="font-semibold text-lg">{data.title || data.locationValue}</div>
         <div className="font-light text-neutral-500">{data.category}</div>
+        {averageRating !== undefined && reviewCount !== undefined && reviewCount > 0 && (
+          <div className="flex items-center gap-1">
+            <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+            <span className="text-sm font-medium">{averageRating.toFixed(1)}</span>
+            <span className="text-sm text-neutral-500">({reviewCount})</span>
+          </div>
+        )}
         <div className="flex flex-row items-center gap-1">
-          <div className="font-semibold">${data.price}</div>
-          <div className="font-light">night</div>
+          <div className="font-semibold">₦{(data.price / 100).toLocaleString()}</div>
+          <div className="font-light">/ hour</div>
         </div>
         {onAction && actionLabel && (
           <Button

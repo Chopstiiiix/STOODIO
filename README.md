@@ -4,22 +4,77 @@ A full-stack vacation rental platform built with Next.js 15, TypeScript, Prisma,
 
 ## Features
 
+### Core Features
 - **Authentication System**: Secure user authentication with NextAuth.js
+  - Email/Password authentication
+  - Google OAuth integration
+  - GitHub OAuth integration
 - **Property Listings**: Browse and view detailed property information
-- **Search & Filters**: Filter properties by category, location, and amenities
+- **Advanced Search & Filters**: Comprehensive search with multiple criteria
+  - Location-based search
+  - Price range filtering
+  - Category filtering (Music, Podcast, Photo, Makeup studios)
+  - Guest count, rooms, and bathroom filters
 - **Booking System**: Reserve properties with an interactive calendar
 - **Responsive Design**: Mobile-friendly interface with Tailwind CSS
+
+### New Features
+
+#### 1. Image Management
+- Multi-image upload with drag & drop (up to 10 images per property)
+- Image gallery with lightbox viewer
+- Automatic cover photo selection
+- Powered by UploadThing
+
+#### 2. User Profiles
+- Public user profile pages
+- Profile editing with image upload
+- User type selection (Host/Guest)
+- Studio type specification for hosts
+- View user listings and statistics
+
+#### 3. Reviews & Ratings
+- 5-star rating system
+- Written reviews with validation
+- Average ratings displayed on property cards
+- Only verified guests (completed bookings) can review
+- Prevent duplicate reviews
+
+#### 4. Enhanced Host Dashboard
+- Comprehensive analytics overview
+- Revenue tracking (total and pending)
+- Booking statistics by status
+- Recent bookings and reviews
+- Dedicated bookings management page
+
+#### 5. Interactive Maps
+- Mapbox integration for location display
+- Interactive location picker for property creation
+- Search locations by address
+- Property markers on map view
+
+#### 6. Email Notifications
+- Automated booking confirmations
+- Host booking notifications
+- Cancellation emails
+- Booking reminders
+- Professional HTML email templates
+- Powered by Resend
 
 ## Tech Stack
 
 - **Frontend**: Next.js 15 (App Router), React 19, TypeScript
-- **Styling**: Tailwind CSS
-- **Authentication**: NextAuth.js v5
+- **Styling**: Tailwind CSS, Lucide Icons
+- **Authentication**: NextAuth.js v4 with OAuth (Google, GitHub)
 - **Database**: PostgreSQL with Prisma ORM
 - **State Management**: Zustand
-- **Form Handling**: React Hook Form
-- **Date Picker**: react-day-picker
+- **Form Handling**: React Hook Form with Zod validation
+- **Date Handling**: date-fns, react-day-picker
 - **Notifications**: react-hot-toast
+- **Image Upload**: UploadThing
+- **Maps**: Mapbox GL JS, react-map-gl
+- **Email Service**: Resend
+- **Payments**: Stripe (with Connect for host payouts)
 
 ## Getting Started
 
@@ -106,16 +161,36 @@ studio-bnb/
 Required environment variables in `.env`:
 
 ```env
+# Database
 DATABASE_URL="your-postgres-connection-string"
-NEXTAUTH_SECRET="your-secret-key"
+
+# NextAuth
+NEXTAUTH_SECRET="your-secret-key"  # Generate with: openssl rand -base64 32
 NEXTAUTH_URL="http://localhost:3000"
+
+# UploadThing (for image uploads)
+UPLOADTHING_SECRET="your-uploadthing-secret"
+UPLOADTHING_APP_ID="your-uploadthing-app-id"
+
+# Stripe (for payments)
+STRIPE_SECRET_KEY="your-stripe-secret-key"
+STRIPE_PUBLISHABLE_KEY="your-stripe-publishable-key"
+STRIPE_WEBHOOK_SECRET="your-stripe-webhook-secret"
+
+# Resend (for emails)
+RESEND_API_KEY="your-resend-api-key"
+
+# Mapbox (for maps)
+NEXT_PUBLIC_MAPBOX_TOKEN="your-mapbox-public-token"
+
+# OAuth Providers (optional)
+GOOGLE_CLIENT_ID="your-google-client-id"
+GOOGLE_CLIENT_SECRET="your-google-client-secret"
+GITHUB_CLIENT_ID="your-github-client-id"
+GITHUB_CLIENT_SECRET="your-github-client-secret"
 ```
 
-Generate a secure secret:
-
-```bash
-openssl rand -base64 32
-```
+See `SETUP_GUIDE.md` for detailed configuration instructions.
 
 ## Available Scripts
 
@@ -152,15 +227,29 @@ openssl rand -base64 32
 - Prevent double-booking
 - View booking history
 
+## Completed Enhancements ✅
+
+- ✅ Image upload functionality (UploadThing)
+- ✅ User profiles with editing
+- ✅ Reviews and ratings system
+- ✅ Enhanced property management dashboard
+- ✅ Advanced search with filters
+- ✅ Interactive maps (Mapbox)
+- ✅ Email notifications (Resend)
+- ✅ Social authentication (Google, GitHub)
+
 ## Future Enhancements
 
-- Image upload functionality
-- User profiles and reviews
-- Payment integration (Stripe)
-- Property management dashboard
-- Advanced search with maps
-- Email notifications
-- Social authentication (Google, GitHub)
+- Automated booking reminder cron jobs
+- Real-time messaging between hosts and guests
+- Wishlist/Favorites functionality
+- Property availability calendar improvements
+- Additional payment methods
+- Mobile application (React Native)
+- SEO optimization
+- Property analytics for hosts
+- Advanced revenue reports
+- Multi-language support
 
 ## License
 

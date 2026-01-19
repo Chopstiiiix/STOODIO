@@ -103,6 +103,11 @@ export async function getPropertyById(propertyId: string) {
       },
       include: {
         user: true,
+        images: {
+          orderBy: {
+            order: "asc",
+          },
+        },
       },
     });
 

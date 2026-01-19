@@ -6,6 +6,7 @@ import { useForm, FieldValues } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Input from "@/components/inputs/Input";
+import ImageUpload from "@/components/inputs/ImageUpload";
 import toast from "react-hot-toast";
 
 const listingSchema = z.object({
@@ -31,6 +32,7 @@ export default function EditListingPage() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [isFetching, setIsFetching] = useState(true);
+  const [images, setImages] = useState<{ url: string; key: string }[]>([]);
 
   const {
     register,
@@ -79,6 +81,16 @@ export default function EditListingPage() {
           instantBook: data.instantBook,
           published: data.published,
         });
+
+        // Load existing images if any
+        if (data.images && data.images.length > 0) {
+          setImages(
+            data.images.map((img: any) => ({
+              url: img.url,
+              key: img.key,
+            }))
+          );
+        }
       } catch (error: any) {
         console.error(error);
         toast.error(error.message || "Failed to load listing");
@@ -92,6 +104,45 @@ export default function EditListingPage() {
       fetchListing();
     }
   }, [listingId, reset, router]);
+
+  const handleImagesChange = async (
+    newImages: { url: string; key: string }[]
+  ) => {
+    const oldImageKeys = new Set(images.map((img) => img.key));
+    const newImageKeys = new Set(newImages.map((img) => img.key));
+
+    // Find images that were added
+    const addedImages = newImages.filter((img) => !oldImageKeys.has(img.key));
+
+    // Find images that were removed
+    const removedImages = images.filter((img) => !newImageKeys.has(img.key));
+
+    try {
+      // Add new images to database
+      if (addedImages.length > 0) {
+        await fetch(`/api/listings/${listingId}/images`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ images: addedImages }),
+        });
+      }
+
+      // Remove deleted images from database
+      for (const img of removedImages) {
+        await fetch(`/api/listings/${listingId}/images?key=${img.key}`, {
+          method: "DELETE",
+        });
+      }
+
+      // Update local state
+      setImages(newImages);
+    } catch (error) {
+      console.error("Error updating images:", error);
+      toast.error("Failed to update images");
+    }
+  };
 
   const onSubmit = async (data: FieldValues) => {
     setIsLoading(true);
@@ -208,6 +259,19 @@ export default function EditListingPage() {
               required
             />
           </div>
+        </div>
+
+        <div className="bg-white border border-gray-200 rounded-lg p-6">
+          <h2 className="text-xl font-semibold mb-4">Images</h2>
+          <p className="text-sm text-gray-600 mb-4">
+            Upload photos of your studio or service. The first image will be used as the cover photo.
+          </p>
+          <ImageUpload
+            value={images}
+            onChange={handleImagesChange}
+            disabled={isLoading}
+            maxFiles={10}
+          />
         </div>
 
         <div className="bg-white border border-gray-200 rounded-lg p-6">

@@ -37,6 +37,11 @@ export async function GET(
             image: true,
           },
         },
+        images: {
+          orderBy: {
+            order: "asc",
+          },
+        },
       },
     });
 
@@ -147,6 +152,11 @@ export async function PATCH(
             name: true,
             email: true,
             image: true,
+          },
+        },
+        images: {
+          orderBy: {
+            order: "asc",
           },
         },
       },

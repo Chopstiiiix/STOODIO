@@ -4,7 +4,10 @@ import { getBookings } from "@/actions/bookings";
 import EmptyState from "@/components/EmptyState";
 import Container from "@/components/Container";
 import PropertyReservation from "@/components/listings/PropertyReservation";
-import Image from "next/image";
+import PropertyImageGallery from "@/components/listings/PropertyImageGallery";
+import ReviewsList from "@/components/reviews/ReviewsList";
+import ReviewForm from "@/components/reviews/ReviewForm";
+import prismadb from "@/lib/prisma";
 import { Bath, Users, Home } from "lucide-react";
 
 interface IParams {
@@ -25,6 +28,34 @@ export default async function PropertyPage({
     return <EmptyState />;
   }
 
+  // Check if current user can leave a review
+  let canReview = false;
+  let hasReviewed = false;
+
+  if (currentUser) {
+    // Check if user has completed booking
+    const completedBooking = await prismadb.booking.findFirst({
+      where: {
+        propertyId,
+        userId: currentUser.id,
+        status: "COMPLETED",
+      },
+    });
+
+    canReview = !!completedBooking;
+
+    // Check if user already left a review
+    if (canReview) {
+      const existingReview = await prismadb.review.findFirst({
+        where: {
+          propertyId,
+          userId: currentUser.id,
+        },
+      });
+      hasReviewed = !!existingReview;
+    }
+  }
+
   return (
     <Container>
       <div className="max-w-screen-lg mx-auto">
@@ -33,14 +64,11 @@ export default async function PropertyPage({
             <h1 className="text-2xl font-bold">{property.title}</h1>
             <p className="text-neutral-500 mt-2">{property.locationValue}</p>
           </div>
-          <div className="w-full h-[60vh] overflow-hidden rounded-xl relative">
-            <Image
-              src={property.imageSrc}
-              fill
-              className="object-cover w-full"
-              alt="Property Image"
-            />
-          </div>
+          <PropertyImageGallery
+            images={property.images || []}
+            fallbackImage={property.imageSrc || undefined}
+            title={property.title}
+          />
           <div className="grid grid-cols-1 md:grid-cols-7 md:gap-10 mt-6">
             <div className="col-span-4 flex flex-col gap-8">
               <div className="flex flex-col gap-2">
@@ -75,6 +103,21 @@ export default async function PropertyPage({
                 currentUserId={currentUser?.id}
               />
             </div>
+          </div>
+
+          {/* Reviews Section */}
+          <hr className="my-8" />
+
+          <div className="grid grid-cols-1 md:grid-cols-7 md:gap-10">
+            <div className="col-span-4">
+              <ReviewsList propertyId={propertyId} />
+            </div>
+
+            {canReview && !hasReviewed && (
+              <div className="md:col-span-3">
+                <ReviewForm propertyId={propertyId} />
+              </div>
+            )}
           </div>
         </div>
       </div>
