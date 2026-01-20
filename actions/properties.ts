@@ -1,9 +1,14 @@
 "use server";
 
 import prismadb from "@/lib/prisma";
-import { Prisma } from "@prisma/client";
 
-type PropertyPayload = Prisma.PropertyGetPayload<{}>;
+// Typed helper that matches the exact query
+async function getPropertiesTyped() {
+  return prismadb.property.findMany();
+}
+
+// Derive type directly from the function (always correct)
+type PropertyPayload = Awaited<ReturnType<typeof getPropertiesTyped>>[number];
 
 export interface PropertyFilters {
   userId?: string;

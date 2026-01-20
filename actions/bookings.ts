@@ -1,11 +1,16 @@
 "use server";
 
 import prismadb from "@/lib/prisma";
-import { Prisma } from "@prisma/client";
 
-type BookingWithProperty = Prisma.BookingGetPayload<{
-  include: { property: true };
-}>;
+// Typed helper that matches the exact query
+async function getBookingsWithPropertyTyped() {
+  return prismadb.booking.findMany({
+    include: { property: true },
+  });
+}
+
+// Derive type directly from the function (always correct)
+type BookingWithProperty = Awaited<ReturnType<typeof getBookingsWithPropertyTyped>>[number];
 
 export async function createBooking(data: {
   propertyId: string;
