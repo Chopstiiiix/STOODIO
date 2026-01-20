@@ -1,6 +1,9 @@
 "use server";
 
 import prismadb from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
+
+type PropertyPayload = Prisma.PropertyGetPayload<{}>;
 
 export interface PropertyFilters {
   userId?: string;
@@ -84,11 +87,13 @@ export async function getProperties(filters: PropertyFilters = {}) {
       },
     });
 
-    const safeProperties = properties.map((property) => ({
-      ...property,
-      createdAt: property.createdAt.toISOString(),
-      updatedAt: property.updatedAt.toISOString(),
-    }));
+    const safeProperties = (properties as PropertyPayload[]).map(
+      (property: PropertyPayload) => ({
+        ...property,
+        createdAt: property.createdAt.toISOString(),
+        updatedAt: property.updatedAt.toISOString(),
+      })
+    );
 
     return safeProperties;
   } catch (error: any) {

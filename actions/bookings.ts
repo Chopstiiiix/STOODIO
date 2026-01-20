@@ -1,6 +1,11 @@
 "use server";
 
 import prismadb from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
+
+type BookingWithProperty = Prisma.BookingGetPayload<{
+  include: { property: true };
+}>;
 
 export async function createBooking(data: {
   propertyId: string;
@@ -63,16 +68,18 @@ export async function getBookings(params: {
       },
     });
 
-    const safeBookings = bookings.map((booking: typeof bookings[number]) => ({
-      ...booking,
-      createdAt: booking.createdAt.toISOString(),
-      startDate: booking.startDate.toISOString(),
-      endDate: booking.endDate.toISOString(),
-      property: {
-        ...booking.property,
-        createdAt: booking.property.createdAt.toISOString(),
-      },
-    }));
+    const safeBookings = (bookings as BookingWithProperty[]).map(
+      (booking: BookingWithProperty) => ({
+        ...booking,
+        createdAt: booking.createdAt.toISOString(),
+        startDate: booking.startDate.toISOString(),
+        endDate: booking.endDate.toISOString(),
+        property: {
+          ...booking.property,
+          createdAt: booking.property.createdAt.toISOString(),
+        },
+      })
+    );
 
     return safeBookings;
   } catch (error: any) {
