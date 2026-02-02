@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: dark;
+}
+
+@theme {
+  --color-primary: #3b82f6;
+}
+
+body {
+  @apply bg-zinc-950 text-white antialiased;
+}
