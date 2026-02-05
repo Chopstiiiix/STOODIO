@@ -13,11 +13,11 @@ interface StudioProps {
     capacity: number;
 }
 
-export function StudioCard({ studio, onBook, onViewGallery }: { studio: StudioProps; onBook: () => void; onViewGallery?: () => void }) {
+export function StudioCard({ studio, onBook, onViewGallery, compact = false }: { studio: StudioProps; onBook: () => void; onViewGallery?: () => void; compact?: boolean }) {
     return (
         <motion.div
             whileHover={{ y: -5 }}
-            className="group relative bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden hover:border-blue-500/50 hover:shadow-[0_0_20px_-5px_rgba(59,130,246,0.3)] transition-all duration-300"
+            className={`group relative bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden hover:border-blue-500/50 hover:shadow-[0_0_20px_-5px_rgba(59,130,246,0.3)] transition-all duration-300 ${compact ? 'w-[280px] flex-shrink-0' : ''}`}
         >
             {/* Image */}
             <div

@@ -5,6 +5,7 @@ import { Layout } from "./components/layout/Layout";
 import { Hero } from "./components/home/Hero";
 import { StudioCard } from "./components/studios/StudioCard";
 import { GalleryModal } from "./components/studios/GalleryModal";
+import { MediaScroller } from "./components/ui/MediaScroller";
 import BlurFade from "./components/ui/blur-fade";
 import { Modal } from "./components/ui/modal";
 import { BookingForm as BookingFormContent } from "./components/booking/BookingForm";
@@ -100,6 +101,69 @@ const STUDIOS = [
     availableTalent: [
       { id: "t5", name: "Elena Gilbert", role: "MUA", rate: 80, avatar: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&q=80&w=150&h=150" }
     ]
+  },
+  {
+    id: "5",
+    name: "Skyline Recording Studio",
+    type: "Music",
+    image: "https://images.unsplash.com/photo-1598653222000-6b7b7a552625?q=80&w=1000&auto=format&fit=crop",
+    images: [
+      "https://images.unsplash.com/photo-1598653222000-6b7b7a552625?q=80&w=1000&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=1000&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1519892300165-cb5542fb47c7?q=80&w=1000&auto=format&fit=crop"
+    ],
+    price: 90,
+    rating: 4.7,
+    location: "Midtown",
+    capacity: 8,
+    availableTalent: [TALENT_POOL[0], TALENT_POOL[3]]
+  },
+  {
+    id: "6",
+    name: "Urban Lens Studio",
+    type: "Photo",
+    image: "https://images.unsplash.com/photo-1497366811353-6870744d04b2?q=80&w=1000&auto=format&fit=crop",
+    images: [
+      "https://images.unsplash.com/photo-1497366811353-6870744d04b2?q=80&w=1000&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1000&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=1000&auto=format&fit=crop"
+    ],
+    price: 70,
+    rating: 4.8,
+    location: "East Village",
+    capacity: 6,
+    availableTalent: [TALENT_POOL[1]]
+  },
+  {
+    id: "7",
+    name: "The Voice Box",
+    type: "Podcast",
+    image: "https://images.unsplash.com/photo-1478737270239-2f02b77fc618?q=80&w=1000&auto=format&fit=crop",
+    images: [
+      "https://images.unsplash.com/photo-1478737270239-2f02b77fc618?q=80&w=1000&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?q=80&w=1000&auto=format&fit=crop"
+    ],
+    price: 60,
+    rating: 4.6,
+    location: "Soho",
+    capacity: 3,
+    availableTalent: [TALENT_POOL[0]]
+  },
+  {
+    id: "8",
+    name: "Glamour Suite",
+    type: "Make Up",
+    image: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=1000&auto=format&fit=crop",
+    images: [
+      "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=1000&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?q=80&w=1000&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?q=80&w=1000&auto=format&fit=crop"
+    ],
+    price: 45,
+    rating: 4.9,
+    location: "Chelsea",
+    capacity: 3,
+    availableTalent: []
   }
 ];
 
@@ -154,17 +218,18 @@ function HomePage() {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <MediaScroller>
           {STUDIOS.map((studio, idx) => (
-            <BlurFade key={studio.id} delay={0.1 * idx} inView>
+            <BlurFade key={studio.id} delay={0.05 * idx} inView>
               <StudioCard
                 studio={studio}
                 onBook={() => handleBook(studio.id)}
                 onViewGallery={() => handleViewGallery(studio.id)}
+                compact
               />
             </BlurFade>
           ))}
-        </div>
+        </MediaScroller>
       </section>
 
       <section className="container mx-auto px-4 py-20 border-t border-zinc-900" id="talent">
