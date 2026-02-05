@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import logoImg from "../../assets/logo.png";
 
 export function Layout({ children }: { children: React.ReactNode }) {
     return (
@@ -7,7 +8,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <div className="container mx-auto px-4 h-28 flex items-center justify-between">
                     <Link to="/" className="flex items-center gap-2 h-full relative cursor-pointer">
                         <img
-                            src="/src/assets/logo.png"
+                            src={logoImg}
                             alt="STOODIO"
                             className="absolute left-0 top-1/2 -translate-y-1/2 h-56 w-auto max-w-none object-contain"
                         />
