@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import { Layout } from "../components/layout/Layout";
 import { StudioCard } from "../components/studios/StudioCard";
@@ -81,10 +82,18 @@ const STUDIOS = [
 ];
 
 export function StudiosPage() {
+  const [searchParams] = useSearchParams();
+  const typeFilter = searchParams.get("type");
+
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [selectedStudioId, setSelectedStudioId] = useState<string | null>(null);
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [galleryStudioId, setGalleryStudioId] = useState<string | null>(null);
+
+  // Filter studios by type if filter is set
+  const filteredStudios = typeFilter
+    ? STUDIOS.filter(s => s.type === typeFilter)
+    : STUDIOS;
 
   const handleBook = (id: string) => {
     setSelectedStudioId(id);
@@ -107,6 +116,12 @@ export function StudiosPage() {
   const selectedStudio = STUDIOS.find(s => s.id === selectedStudioId);
   const galleryStudio = STUDIOS.find(s => s.id === galleryStudioId);
 
+  // Get page title based on filter
+  const pageTitle = typeFilter ? `${typeFilter} Studios` : "Browse Studios";
+  const pageSubtitle = typeFilter
+    ? `Explore our ${typeFilter.toLowerCase()} studio spaces`
+    : "Find the perfect space for your creative project";
+
   return (
     <Layout>
       <section className="container mx-auto px-4 py-20">
@@ -114,21 +129,27 @@ export function StudiosPage() {
           <BackButton />
         </div>
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-4">Browse Studios</h1>
-          <p className="text-xl text-zinc-400">Find the perfect space for your creative project</p>
+          <h1 className="text-4xl font-bold mb-4">{pageTitle}</h1>
+          <p className="text-xl text-zinc-400">{pageSubtitle}</p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {STUDIOS.map((studio, idx) => (
-            <BlurFade key={studio.id} delay={0.1 * idx} inView>
-              <StudioCard
-                studio={studio}
-                onBook={() => handleBook(studio.id)}
-                onViewGallery={() => handleViewGallery(studio.id)}
-              />
-            </BlurFade>
-          ))}
-        </div>
+        {filteredStudios.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {filteredStudios.map((studio, idx) => (
+              <BlurFade key={studio.id} delay={0.1 * idx} inView>
+                <StudioCard
+                  studio={studio}
+                  onBook={() => handleBook(studio.id)}
+                  onViewGallery={() => handleViewGallery(studio.id)}
+                />
+              </BlurFade>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-20">
+            <p className="text-zinc-400 text-lg">No {typeFilter?.toLowerCase()} studios available at the moment.</p>
+          </div>
+        )}
       </section>
 
       <Modal isOpen={isBookingOpen} onClose={() => setIsBookingOpen(false)}>

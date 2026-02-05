@@ -15,10 +15,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
                         <div className="w-32 h-full" />
                     </Link>
                     <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-zinc-400">
-                        <a href="#" className="hover:text-blue-400 transition-colors">Music</a>
-                        <a href="#" className="hover:text-blue-400 transition-colors">Photo</a>
-                        <a href="#" className="hover:text-blue-400 transition-colors">Podcast</a>
-                        <a href="#" className="hover:text-blue-400 transition-colors">Make Up</a>
+                        <Link to="/studios?type=Music" className="hover:text-blue-400 transition-colors">Music</Link>
+                        <Link to="/studios?type=Photo" className="hover:text-blue-400 transition-colors">Photo</Link>
+                        <Link to="/studios?type=Podcast" className="hover:text-blue-400 transition-colors">Podcast</Link>
+                        <Link to="/studios?type=Make Up" className="hover:text-blue-400 transition-colors">Make Up</Link>
                     </nav>
                     <div className="flex items-center gap-4">
                         <button className="text-sm font-medium text-zinc-300 hover:text-white transition-colors">
