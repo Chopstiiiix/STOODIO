@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Layout } from "../components/layout/Layout";
 import { StudioCard } from "../components/studios/StudioCard";
+import { BackButton } from "../components/ui/BackButton";
 import BlurFade from "../components/ui/blur-fade";
 import { Modal } from "../components/ui/modal";
 import { BookingForm as BookingFormContent } from "../components/booking/BookingForm";
@@ -67,6 +68,9 @@ export function StudiosPage() {
   return (
     <Layout>
       <section className="container mx-auto px-4 py-20">
+        <div className="mb-8">
+          <BackButton />
+        </div>
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold mb-4">Browse Studios</h1>
           <p className="text-xl text-zinc-400">Find the perfect space for your creative project</p>

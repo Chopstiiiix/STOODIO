@@ -1,9 +1,13 @@
 import { Layout } from "../components/layout/Layout";
+import { BackButton } from "../components/ui/BackButton";
 
 export function HowItWorksPage() {
   return (
     <Layout>
       <section className="container mx-auto px-4 py-20">
+        <div className="mb-8">
+          <BackButton />
+        </div>
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold mb-4">How It Works</h1>
           <p className="text-xl text-zinc-400">Simple steps to book your perfect creative space</p>
