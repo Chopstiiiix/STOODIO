@@ -21,6 +21,10 @@ import sarahImg from "./assets/talent/sarah_jenkins.jpg";
 import mikeImg from "./assets/talent/mike_ross.jpg";
 import jessicaImg from "./assets/talent/jessica_pearson.jpg";
 import harveyImg from "./assets/talent/harvey_specter.jpg";
+import rachelImg from "./assets/talent/rachel_zane.jpg";
+import louisImg from "./assets/talent/louis_litt.jpg";
+import donnaImg from "./assets/talent/donna_paulsen.jpg";
+import alexImg from "./assets/talent/alex_williams.jpg";
 
 // Mock Talent Data
 const TALENT_POOL: Talent[] = [
@@ -28,10 +32,10 @@ const TALENT_POOL: Talent[] = [
   { id: "t2", name: "Mike Ross", role: "Videographer", rate: 75, avatar: mikeImg },
   { id: "t3", name: "Jessica Pearson", role: "Creative Director", rate: 120, avatar: jessicaImg },
   { id: "t4", name: "Harvey Specter", role: "Producer", rate: 100, avatar: harveyImg },
-  { id: "t5", name: "Rachel Zane", role: "Photographer", rate: 85, avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=300&h=300" },
-  { id: "t6", name: "Louis Litt", role: "Audio Mixer", rate: 65, avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=300&h=300" },
-  { id: "t7", name: "Donna Paulsen", role: "Makeup Artist", rate: 90, avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=300&h=300" },
-  { id: "t8", name: "Alex Williams", role: "Video Editor", rate: 70, avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=300&h=300" },
+  { id: "t5", name: "Rachel Zane", role: "Photographer", rate: 85, avatar: rachelImg },
+  { id: "t6", name: "Louis Litt", role: "Audio Mixer", rate: 65, avatar: louisImg },
+  { id: "t7", name: "Donna Paulsen", role: "Makeup Artist", rate: 90, avatar: donnaImg },
+  { id: "t8", name: "Alex Williams", role: "Video Editor", rate: 70, avatar: alexImg },
 ];
 
 // Mock Data
