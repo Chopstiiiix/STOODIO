@@ -17,7 +17,7 @@ export function Hero() {
             <div className="container mx-auto px-4 text-center z-10 relative">
                 <BlurFade delay={0.25} inView>
                     <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none bg-clip-text text-transparent bg-gradient-to-br from-white to-zinc-500">
-                        Create without limits.
+                        Connect, Collaborate, Create.
                     </h2>
                 </BlurFade>
                 <BlurFade delay={0.35} inView>
