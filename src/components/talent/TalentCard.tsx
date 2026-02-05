@@ -5,13 +5,14 @@ import type { Talent } from "./TalentItem";
 interface TalentCardProps {
     talent: Talent;
     onHire: () => void;
+    compact?: boolean;
 }
 
-export function TalentCard({ talent, onHire }: TalentCardProps) {
+export function TalentCard({ talent, onHire, compact = false }: TalentCardProps) {
     return (
         <motion.div
             whileHover={{ y: -5 }}
-            className="group relative bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden hover:border-blue-500/50 hover:shadow-[0_0_20px_-5px_rgba(59,130,246,0.3)] transition-all duration-300 flex flex-col"
+            className={`group relative bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden hover:border-blue-500/50 hover:shadow-[0_0_20px_-5px_rgba(59,130,246,0.3)] transition-all duration-300 flex flex-col ${compact ? 'w-[260px] flex-shrink-0' : ''}`}
         >
             <div className="aspect-square relative overflow-hidden bg-zinc-800">
                 {talent.avatar ? (

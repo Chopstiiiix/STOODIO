@@ -28,6 +28,10 @@ const TALENT_POOL: Talent[] = [
   { id: "t2", name: "Mike Ross", role: "Videographer", rate: 75, avatar: mikeImg },
   { id: "t3", name: "Jessica Pearson", role: "Creative Director", rate: 120, avatar: jessicaImg },
   { id: "t4", name: "Harvey Specter", role: "Producer", rate: 100, avatar: harveyImg },
+  { id: "t5", name: "Rachel Zane", role: "Photographer", rate: 85, avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=300&h=300" },
+  { id: "t6", name: "Louis Litt", role: "Audio Mixer", rate: 65, avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=300&h=300" },
+  { id: "t7", name: "Donna Paulsen", role: "Makeup Artist", rate: 90, avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=300&h=300" },
+  { id: "t8", name: "Alex Williams", role: "Video Editor", rate: 70, avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=300&h=300" },
 ];
 
 // Mock Data
@@ -243,16 +247,17 @@ function HomePage() {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <MediaScroller>
           {TALENT_POOL.map((talent, idx) => (
-            <BlurFade key={talent.id} delay={0.1 * idx} inView>
+            <BlurFade key={talent.id} delay={0.05 * idx} inView>
               <TalentCard
                 talent={talent}
                 onHire={() => handleHire(talent.id)}
+                compact
               />
             </BlurFade>
           ))}
-        </div>
+        </MediaScroller>
       </section>
 
       <Modal isOpen={isBookingOpen} onClose={() => setIsBookingOpen(false)}>
