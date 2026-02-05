@@ -5,21 +5,7 @@ import { BackButton } from "../components/ui/BackButton";
 import BlurFade from "../components/ui/blur-fade";
 import { Modal } from "../components/ui/modal";
 import { HireModal } from "../components/booking/HireModal";
-import type { Talent } from "../components/talent/TalentItem";
-
-// Talent Images
-import sarahImg from "../assets/talent/sarah_jenkins.jpg";
-import mikeImg from "../assets/talent/mike_ross.jpg";
-import jessicaImg from "../assets/talent/jessica_pearson.jpg";
-import harveyImg from "../assets/talent/harvey_specter.jpg";
-
-// Mock Talent Data
-const TALENT_POOL: Talent[] = [
-  { id: "t1", name: "Sarah Jenkins", role: "Sound Engineer", rate: 50, avatar: sarahImg },
-  { id: "t2", name: "Mike Ross", role: "Videographer", rate: 75, avatar: mikeImg },
-  { id: "t3", name: "Jessica Pearson", role: "Creative Director", rate: 120, avatar: jessicaImg },
-  { id: "t4", name: "Harvey Specter", role: "Producer", rate: 100, avatar: harveyImg },
-];
+import { TALENT_POOL } from "../data";
 
 export function TalentPage() {
   const [selectedTalentId, setSelectedTalentId] = useState<string | null>(null);
