@@ -5,16 +5,20 @@ import type { Talent } from "./TalentItem";
 interface TalentCardProps {
     talent: Talent;
     onHire: () => void;
+    onViewProfile?: () => void;
     compact?: boolean;
 }
 
-export function TalentCard({ talent, onHire, compact = false }: TalentCardProps) {
+export function TalentCard({ talent, onHire, onViewProfile, compact = false }: TalentCardProps) {
     return (
         <motion.div
             whileHover={{ y: -5 }}
             className={`group relative bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden hover:border-blue-500/50 hover:shadow-[0_0_20px_-5px_rgba(59,130,246,0.3)] transition-all duration-300 flex flex-col ${compact ? 'w-[260px] flex-shrink-0' : ''}`}
         >
-            <div className="aspect-square relative overflow-hidden bg-zinc-800">
+            <div
+                className="aspect-square relative overflow-hidden bg-zinc-800 cursor-pointer"
+                onClick={onViewProfile}
+            >
                 {talent.avatar ? (
                     <img
                         src={talent.avatar}
@@ -27,6 +31,15 @@ export function TalentCard({ talent, onHire, compact = false }: TalentCardProps)
                     </div>
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/90 via-transparent to-transparent" />
+
+                {/* View Profile indicator on hover */}
+                {onViewProfile && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span className="text-white text-sm font-medium bg-blue-600/90 px-4 py-2 rounded-full">
+                            View Profile
+                        </span>
+                    </div>
+                )}
 
                 <div className="absolute bottom-4 left-4 right-4">
                     <h3 className="text-xl font-bold text-white mb-1">{talent.name}</h3>

@@ -1,11 +1,20 @@
 import { User, Check } from "lucide-react";
 
+export interface PortfolioItem {
+    title: string;
+    type: string; // "Song" | "Project" | "Album" | "Film" | "Campaign"
+    artist?: string;
+    year: number;
+}
+
 export interface Talent {
     id: string;
     name: string;
     role: string;
     rate: number;
     avatar?: string;
+    bio?: string;
+    portfolio?: PortfolioItem[];
 }
 
 interface TalentItemProps {

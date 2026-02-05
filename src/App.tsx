@@ -11,6 +11,7 @@ import { Modal } from "./components/ui/modal";
 import { BookingForm as BookingFormContent } from "./components/booking/BookingForm";
 import { HireModal } from "./components/booking/HireModal";
 import { TalentCard } from "./components/talent/TalentCard";
+import { TalentProfileModal } from "./components/talent/TalentProfileModal";
 import { StudiosPage } from "./pages/StudiosPage";
 import { TalentPage } from "./pages/TalentPage";
 import { HowItWorksPage } from "./pages/HowItWorksPage";
@@ -24,6 +25,8 @@ function HomePage() {
   const [isHireModalOpen, setIsHireModalOpen] = useState(false);
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [galleryStudioId, setGalleryStudioId] = useState<string | null>(null);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [profileTalentId, setProfileTalentId] = useState<string | null>(null);
 
   const handleBook = (id: string) => {
     setSelectedStudioId(id);
@@ -33,6 +36,19 @@ function HomePage() {
   const handleHire = (id: string) => {
     setSelectedTalentId(id);
     setIsHireModalOpen(true);
+  };
+
+  const handleViewProfile = (id: string) => {
+    setProfileTalentId(id);
+    setIsProfileOpen(true);
+  };
+
+  const handleHireFromProfile = () => {
+    if (profileTalentId) {
+      setIsProfileOpen(false);
+      setSelectedTalentId(profileTalentId);
+      setIsHireModalOpen(true);
+    }
   };
 
   const handleViewGallery = (id: string) => {
@@ -51,6 +67,7 @@ function HomePage() {
   const selectedStudio = STUDIOS.find(s => s.id === selectedStudioId);
   const selectedTalent = TALENT_POOL.find(t => t.id === selectedTalentId);
   const galleryStudio = STUDIOS.find(s => s.id === galleryStudioId);
+  const profileTalent = TALENT_POOL.find(t => t.id === profileTalentId);
 
   return (
     <Layout>
@@ -98,6 +115,7 @@ function HomePage() {
               <TalentCard
                 talent={talent}
                 onHire={() => handleHire(talent.id)}
+                onViewProfile={() => handleViewProfile(talent.id)}
                 compact
               />
             </BlurFade>
@@ -126,6 +144,16 @@ function HomePage() {
             studio={galleryStudio}
             onClose={() => setIsGalleryOpen(false)}
             onBook={handleBookFromGallery}
+          />
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {isProfileOpen && profileTalent && (
+          <TalentProfileModal
+            talent={profileTalent}
+            onClose={() => setIsProfileOpen(false)}
+            onHire={handleHireFromProfile}
           />
         )}
       </AnimatePresence>

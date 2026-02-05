@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { AnimatePresence } from "framer-motion";
 import { Layout } from "../components/layout/Layout";
 import { TalentCard } from "../components/talent/TalentCard";
+import { TalentProfileModal } from "../components/talent/TalentProfileModal";
 import { BackButton } from "../components/ui/BackButton";
 import BlurFade from "../components/ui/blur-fade";
 import { Modal } from "../components/ui/modal";
@@ -10,13 +12,29 @@ import { TALENT_POOL } from "../data";
 export function TalentPage() {
   const [selectedTalentId, setSelectedTalentId] = useState<string | null>(null);
   const [isHireModalOpen, setIsHireModalOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [profileTalentId, setProfileTalentId] = useState<string | null>(null);
 
   const handleHire = (id: string) => {
     setSelectedTalentId(id);
     setIsHireModalOpen(true);
   };
 
+  const handleViewProfile = (id: string) => {
+    setProfileTalentId(id);
+    setIsProfileOpen(true);
+  };
+
+  const handleHireFromProfile = () => {
+    if (profileTalentId) {
+      setIsProfileOpen(false);
+      setSelectedTalentId(profileTalentId);
+      setIsHireModalOpen(true);
+    }
+  };
+
   const selectedTalent = TALENT_POOL.find(t => t.id === selectedTalentId);
+  const profileTalent = TALENT_POOL.find(t => t.id === profileTalentId);
 
   return (
     <Layout>
@@ -35,6 +53,7 @@ export function TalentPage() {
               <TalentCard
                 talent={talent}
                 onHire={() => handleHire(talent.id)}
+                onViewProfile={() => handleViewProfile(talent.id)}
               />
             </BlurFade>
           ))}
@@ -47,6 +66,16 @@ export function TalentPage() {
           talent={selectedTalent}
         />
       </Modal>
+
+      <AnimatePresence>
+        {isProfileOpen && profileTalent && (
+          <TalentProfileModal
+            talent={profileTalent}
+            onClose={() => setIsProfileOpen(false)}
+            onHire={handleHireFromProfile}
+          />
+        )}
+      </AnimatePresence>
     </Layout>
   )
 }

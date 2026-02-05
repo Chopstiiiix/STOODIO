@@ -12,14 +12,118 @@ import alexImg from "../assets/talent/alex_williams.jpg";
 
 // All Talent Data
 export const TALENT_POOL: Talent[] = [
-  { id: "t1", name: "Sarah Jenkins", role: "Sound Engineer", rate: 50, avatar: sarahImg },
-  { id: "t2", name: "Mike Ross", role: "Videographer", rate: 75, avatar: mikeImg },
-  { id: "t3", name: "Jessica Pearson", role: "Creative Director", rate: 120, avatar: jessicaImg },
-  { id: "t4", name: "Harvey Specter", role: "Producer", rate: 100, avatar: harveyImg },
-  { id: "t5", name: "Rachel Zane", role: "Photographer", rate: 85, avatar: rachelImg },
-  { id: "t6", name: "Louis Litt", role: "Audio Mixer", rate: 65, avatar: louisImg },
-  { id: "t7", name: "Donna Paulsen", role: "Makeup Artist", rate: 90, avatar: donnaImg },
-  { id: "t8", name: "Alex Williams", role: "Video Editor", rate: 70, avatar: alexImg },
+  {
+    id: "t1",
+    name: "Sarah Jenkins",
+    role: "Sound Engineer",
+    rate: 50,
+    avatar: sarahImg,
+    bio: "Award-winning sound engineer with 8+ years of experience in music production, podcast audio, and live sound mixing.",
+    portfolio: [
+      { title: "Midnight Dreams", type: "Album", artist: "Luna Ray", year: 2024 },
+      { title: "Electric Soul", type: "Song", artist: "The Waves", year: 2024 },
+      { title: "Tech Talk Daily", type: "Podcast", artist: "TechCrunch", year: 2023 },
+      { title: "Acoustic Sessions Vol. 2", type: "Album", artist: "Various Artists", year: 2023 },
+    ]
+  },
+  {
+    id: "t2",
+    name: "Mike Ross",
+    role: "Videographer",
+    rate: 75,
+    avatar: mikeImg,
+    bio: "Cinematic videographer specializing in music videos, documentaries, and brand content. Featured in multiple film festivals.",
+    portfolio: [
+      { title: "Neon Nights", type: "Music Video", artist: "DJ Pulse", year: 2024 },
+      { title: "Rise Up", type: "Documentary", artist: "Independent", year: 2024 },
+      { title: "Summer Vibes", type: "Music Video", artist: "Beach Boys Collective", year: 2023 },
+      { title: "Urban Stories", type: "Short Film", artist: "City Films", year: 2023 },
+    ]
+  },
+  {
+    id: "t3",
+    name: "Jessica Pearson",
+    role: "Creative Director",
+    rate: 120,
+    avatar: jessicaImg,
+    bio: "Visionary creative director with experience leading campaigns for Fortune 500 brands and emerging artists alike.",
+    portfolio: [
+      { title: "Elevate Campaign", type: "Campaign", artist: "Nike", year: 2024 },
+      { title: "World Tour Visuals", type: "Project", artist: "Major Artist", year: 2024 },
+      { title: "Brand Refresh", type: "Campaign", artist: "Spotify", year: 2023 },
+      { title: "Album Art Direction", type: "Project", artist: "Rising Stars", year: 2023 },
+    ]
+  },
+  {
+    id: "t4",
+    name: "Harvey Specter",
+    role: "Producer",
+    rate: 100,
+    avatar: harveyImg,
+    bio: "Grammy-nominated producer known for blending genres and creating chart-topping hits across hip-hop, R&B, and pop.",
+    portfolio: [
+      { title: "Golden Hour", type: "Album", artist: "Aria Grande", year: 2024 },
+      { title: "City Lights", type: "Song", artist: "Metro Stars", year: 2024 },
+      { title: "Unstoppable", type: "Song", artist: "Champion", year: 2023 },
+      { title: "Late Night Feels", type: "EP", artist: "Mood Music", year: 2023 },
+    ]
+  },
+  {
+    id: "t5",
+    name: "Rachel Zane",
+    role: "Photographer",
+    rate: 85,
+    avatar: rachelImg,
+    bio: "Editorial and portrait photographer whose work has been featured in Vogue, GQ, and Rolling Stone.",
+    portfolio: [
+      { title: "Cover Shoot", type: "Editorial", artist: "Vogue", year: 2024 },
+      { title: "Album Artwork", type: "Photography", artist: "Indie Band", year: 2024 },
+      { title: "Fashion Week", type: "Editorial", artist: "Paris Fashion", year: 2023 },
+      { title: "Artist Portraits", type: "Project", artist: "Record Label", year: 2023 },
+    ]
+  },
+  {
+    id: "t6",
+    name: "Louis Litt",
+    role: "Audio Mixer",
+    rate: 65,
+    avatar: louisImg,
+    bio: "Precision audio mixer with expertise in surround sound, Dolby Atmos, and immersive audio experiences.",
+    portfolio: [
+      { title: "Spatial Audio Mix", type: "Album", artist: "Electronic Dreams", year: 2024 },
+      { title: "Film Score Mix", type: "Film", artist: "Hollywood Studios", year: 2024 },
+      { title: "Podcast Mastering", type: "Podcast", artist: "NPR", year: 2023 },
+      { title: "Live Concert Mix", type: "Project", artist: "Arena Tour", year: 2023 },
+    ]
+  },
+  {
+    id: "t7",
+    name: "Donna Paulsen",
+    role: "Makeup Artist",
+    rate: 90,
+    avatar: donnaImg,
+    bio: "Celebrity makeup artist specializing in editorial, music video, and red carpet looks. Trained at top beauty schools.",
+    portfolio: [
+      { title: "Music Video Glam", type: "Music Video", artist: "Pop Star", year: 2024 },
+      { title: "Magazine Cover", type: "Editorial", artist: "Elle", year: 2024 },
+      { title: "Award Show Prep", type: "Event", artist: "Grammy Awards", year: 2023 },
+      { title: "Tour Makeup", type: "Project", artist: "World Tour", year: 2023 },
+    ]
+  },
+  {
+    id: "t8",
+    name: "Alex Williams",
+    role: "Video Editor",
+    rate: 70,
+    avatar: alexImg,
+    bio: "Creative video editor skilled in music videos, social content, and documentary storytelling with a fast turnaround.",
+    portfolio: [
+      { title: "Viral Music Video", type: "Music Video", artist: "TikTok Star", year: 2024 },
+      { title: "Brand Documentary", type: "Documentary", artist: "Tech Startup", year: 2024 },
+      { title: "Tour Recap", type: "Video", artist: "Rock Band", year: 2023 },
+      { title: "Social Campaign", type: "Project", artist: "Fashion Brand", year: 2023 },
+    ]
+  },
 ];
 
 // All Studios Data
