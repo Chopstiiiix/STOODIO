@@ -13,17 +13,17 @@ export function TalentCard({ talent, onHire, onViewProfile, compact = false }: T
     return (
         <motion.div
             whileHover={{ y: -5 }}
-            className={`group relative bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden hover:border-blue-500/50 hover:shadow-[0_0_20px_-5px_rgba(59,130,246,0.3)] transition-all duration-300 flex flex-col ${compact ? 'w-[260px] flex-shrink-0' : ''}`}
+            className={`relative bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden hover:border-blue-500/50 hover:shadow-[0_0_20px_-5px_rgba(59,130,246,0.3)] transition-all duration-300 flex flex-col ${compact ? 'w-[260px] flex-shrink-0' : ''}`}
         >
             <div
-                className="aspect-square relative overflow-hidden bg-zinc-800 cursor-pointer"
+                className="group/image aspect-square relative overflow-hidden bg-zinc-800 cursor-pointer"
                 onClick={onViewProfile}
             >
                 {talent.avatar ? (
                     <img
                         src={talent.avatar}
                         alt={talent.name}
-                        className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
+                        className="object-cover w-full h-full group-hover/image:scale-110 transition-transform duration-500"
                     />
                 ) : (
                     <div className="w-full h-full flex items-center justify-center text-zinc-600">
@@ -34,7 +34,7 @@ export function TalentCard({ talent, onHire, onViewProfile, compact = false }: T
 
                 {/* View Profile indicator on hover */}
                 {onViewProfile && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover/image:opacity-100 transition-opacity">
                         <span className="text-white text-sm font-medium bg-blue-600/90 px-4 py-2 rounded-full">
                             View Profile
                         </span>
@@ -60,7 +60,7 @@ export function TalentCard({ talent, onHire, onViewProfile, compact = false }: T
 
                 <button
                     onClick={onHire}
-                    className="mt-auto w-full bg-zinc-800 hover:bg-blue-600 text-white font-medium py-3 rounded-lg transition-all duration-300 group-hover:bg-blue-600"
+                    className="mt-auto w-full bg-zinc-800 hover:bg-blue-600 text-white font-medium py-3 rounded-lg transition-all duration-300"
                 >
                     Hire Now
                 </button>
