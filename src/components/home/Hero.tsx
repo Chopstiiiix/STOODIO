@@ -1,6 +1,17 @@
+import { useNavigate } from "react-router-dom";
 import BlurFade from "../ui/blur-fade";
 
 export function Hero() {
+    const navigate = useNavigate();
+
+    const handleBrowseSpaces = () => {
+        navigate('/studios');
+    };
+
+    const handleHowItWorks = () => {
+        navigate('/how-it-works');
+    };
+
     return (
         <section className="relative overflow-hidden py-20 md:py-32 lg:py-40">
             <div className="container mx-auto px-4 text-center z-10 relative">
@@ -18,10 +29,16 @@ export function Hero() {
                 </BlurFade>
                 <BlurFade delay={0.45} inView>
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                        <button className="min-w-[160px] bg-white text-black hover:bg-zinc-200 font-semibold px-6 py-3 rounded-full transition-transform hover:scale-105 active:scale-95">
+                        <button 
+                            onClick={handleBrowseSpaces}
+                            className="min-w-[160px] bg-white text-black hover:bg-zinc-200 font-semibold px-6 py-3 rounded-full transition-transform hover:scale-105 active:scale-95"
+                        >
                             Browse Spaces
                         </button>
-                        <button className="min-w-[160px] bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-white font-semibold px-6 py-3 rounded-full transition-all hover:border-zinc-700">
+                        <button 
+                            onClick={handleHowItWorks}
+                            className="min-w-[160px] bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-white font-semibold px-6 py-3 rounded-full transition-all hover:border-zinc-700"
+                        >
                             How it works
                         </button>
                     </div>
