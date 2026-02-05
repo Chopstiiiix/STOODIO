@@ -6,6 +6,7 @@ import { Hero } from "./components/home/Hero";
 import { StudioCard } from "./components/studios/StudioCard";
 import { GalleryModal } from "./components/studios/GalleryModal";
 import { MediaScroller } from "./components/ui/MediaScroller";
+import { NotificationList } from "./components/ui/NotificationList";
 import BlurFade from "./components/ui/blur-fade";
 import { Modal } from "./components/ui/modal";
 import { BookingForm as BookingFormContent } from "./components/booking/BookingForm";
@@ -163,12 +164,15 @@ function HomePage() {
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/studios" element={<StudiosPage />} />
-      <Route path="/talent" element={<TalentPage />} />
-      <Route path="/how-it-works" element={<HowItWorksPage />} />
-    </Routes>
+    <>
+      <NotificationList />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/studios" element={<StudiosPage />} />
+        <Route path="/talent" element={<TalentPage />} />
+        <Route path="/how-it-works" element={<HowItWorksPage />} />
+      </Routes>
+    </>
   )
 }
 

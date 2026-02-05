@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Calendar, Briefcase } from "lucide-react";
 import type { Talent } from "../talent/TalentItem";
+import { useNotifications } from "../../context/NotificationContext";
 
 interface HireModalProps {
     onClose: () => void;
@@ -10,11 +11,29 @@ interface HireModalProps {
 export function HireModal({ onClose, talent }: HireModalProps) {
     const [date, setDate] = useState("");
     const [projectType, setProjectType] = useState("");
+    const { addNotification } = useNotifications();
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (!talent) return;
-        alert(`Request sent to ${talent.name} for ${projectType} on ${date}!`);
+
+        // Simulate hire request (90% success rate for demo)
+        const isSuccess = Math.random() > 0.1;
+
+        if (isSuccess) {
+            addNotification({
+                type: "success",
+                title: "Request Sent!",
+                message: `Your ${projectType} request was sent to ${talent.name} for ${new Date(date).toLocaleDateString()}.`
+            });
+        } else {
+            addNotification({
+                type: "error",
+                title: "Request Failed",
+                message: `Unable to send request to ${talent.name}. Please try again.`
+            });
+        }
+
         onClose();
     };
 

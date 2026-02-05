@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Calendar } from "lucide-react";
 import { TalentItem, type Talent } from "../talent/TalentItem";
+import { useNotifications } from "../../context/NotificationContext";
 
 interface BookingFormProps {
     onClose: () => void;
@@ -11,6 +12,7 @@ interface BookingFormProps {
 export function BookingForm({ onClose, studioName, availableTalent = [] }: BookingFormProps) {
     const [date, setDate] = useState("");
     const [selectedTalent, setSelectedTalent] = useState<string[]>([]);
+    const { addNotification } = useNotifications();
 
     const toggleTalent = (id: string) => {
         setSelectedTalent(prev =>
@@ -20,9 +22,29 @@ export function BookingForm({ onClose, studioName, availableTalent = [] }: Booki
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        // Mock submission
-        const talentNames = availableTalent.filter(t => selectedTalent.includes(t.id)).map(t => t.name).join(", ");
-        alert(`Booking request sent for ${studioName} on ${date}!\nIncluding talent: ${talentNames || "None"}`);
+
+        // Simulate booking (90% success rate for demo)
+        const isSuccess = Math.random() > 0.1;
+
+        if (isSuccess) {
+            const talentNames = availableTalent
+                .filter(t => selectedTalent.includes(t.id))
+                .map(t => t.name)
+                .join(", ");
+
+            addNotification({
+                type: "success",
+                title: "Booking Confirmed!",
+                message: `${studioName} booked for ${new Date(date).toLocaleDateString()}${talentNames ? `. Talent: ${talentNames}` : ""}`
+            });
+        } else {
+            addNotification({
+                type: "error",
+                title: "Booking Failed",
+                message: `Unable to book ${studioName}. Please try again later.`
+            });
+        }
+
         onClose();
     };
 
