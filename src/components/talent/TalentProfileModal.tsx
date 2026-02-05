@@ -35,7 +35,7 @@ export function TalentProfileModal({ talent, onClose, onHire }: TalentProfileMod
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.95, opacity: 0 }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className="relative w-full max-w-2xl bg-zinc-900 rounded-2xl border border-zinc-800 overflow-hidden"
+        className="relative w-full max-w-2xl max-h-[90vh] bg-zinc-900 rounded-2xl border border-zinc-800 overflow-hidden flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
@@ -46,84 +46,86 @@ export function TalentProfileModal({ talent, onClose, onHire }: TalentProfileMod
           <X className="w-5 h-5 text-white" />
         </button>
 
-        <div className="flex flex-col md:flex-row">
-          {/* Profile Image */}
-          <div className="md:w-2/5 relative">
-            <div className="aspect-square md:h-full">
-              <img
-                src={talent.avatar}
-                alt={talent.name}
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-transparent to-transparent md:bg-gradient-to-r" />
-            </div>
-          </div>
-
-          {/* Profile Info */}
-          <div className="md:w-3/5 p-6 flex flex-col">
-            <div className="mb-4">
-              <div className="flex items-center gap-2 mb-2">
-                <span className="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded-md">
-                  {talent.role}
-                </span>
-                <div className="flex items-center gap-1 text-yellow-400 text-sm">
-                  <Star className="h-4 w-4 fill-yellow-400" />
-                  5.0
-                </div>
+        {/* Scrollable Content */}
+        <div className="overflow-y-auto flex-1">
+          <div className="flex flex-col md:flex-row">
+            {/* Profile Image - Fixed height on mobile, proportional on desktop */}
+            <div className="w-full md:w-2/5 flex-shrink-0">
+              <div className="relative h-64 md:h-80">
+                <img
+                  src={talent.avatar}
+                  alt={talent.name}
+                  className="w-full h-full object-cover"
+                />
               </div>
-              <h2 className="text-2xl font-bold text-white">{talent.name}</h2>
-              <p className="text-zinc-400 text-sm mt-1">
-                ${talent.rate}/hr
-              </p>
             </div>
 
-            {talent.bio && (
-              <p className="text-zinc-300 text-sm mb-6 leading-relaxed">
-                {talent.bio}
-              </p>
-            )}
-
-            {/* Portfolio */}
-            {talent.portfolio && talent.portfolio.length > 0 && (
-              <div className="flex-1 mb-6">
-                <h3 className="text-sm font-semibold text-zinc-400 uppercase tracking-wider mb-3">
-                  Featured Work
-                </h3>
-                <div className="space-y-2 max-h-48 overflow-y-auto pr-2">
-                  {talent.portfolio.map((item: PortfolioItem, index: number) => (
-                    <div
-                      key={index}
-                      className="flex items-center gap-3 p-3 bg-zinc-800/50 rounded-lg border border-zinc-700/50"
-                    >
-                      <div className="w-8 h-8 rounded-lg bg-zinc-700 flex items-center justify-center text-blue-400">
-                        {getPortfolioIcon(item.type)}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-white font-medium text-sm truncate">
-                          {item.title}
-                        </p>
-                        <p className="text-zinc-400 text-xs">
-                          {item.artist && `${item.artist} • `}
-                          {item.type}
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-1 text-zinc-500 text-xs">
-                        <Calendar className="w-3 h-3" />
-                        {item.year}
-                      </div>
-                    </div>
-                  ))}
+            {/* Profile Info */}
+            <div className="w-full md:w-3/5 p-6 flex flex-col">
+              <div className="mb-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded-md">
+                    {talent.role}
+                  </span>
+                  <div className="flex items-center gap-1 text-yellow-400 text-sm">
+                    <Star className="h-4 w-4 fill-yellow-400" />
+                    5.0
+                  </div>
                 </div>
+                <h2 className="text-2xl font-bold text-white">{talent.name}</h2>
+                <p className="text-zinc-400 text-sm mt-1">
+                  ${talent.rate}/hr
+                </p>
               </div>
-            )}
 
-            {/* Hire Button */}
-            <button
-              onClick={onHire}
-              className="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold py-3 rounded-xl transition-colors"
-            >
-              Hire {talent.name.split(' ')[0]}
-            </button>
+              {talent.bio && (
+                <p className="text-zinc-300 text-sm mb-6 leading-relaxed">
+                  {talent.bio}
+                </p>
+              )}
+
+              {/* Portfolio */}
+              {talent.portfolio && talent.portfolio.length > 0 && (
+                <div className="mb-6">
+                  <h3 className="text-sm font-semibold text-zinc-400 uppercase tracking-wider mb-3">
+                    Featured Work
+                  </h3>
+                  <div className="space-y-2">
+                    {talent.portfolio.map((item: PortfolioItem, index: number) => (
+                      <div
+                        key={index}
+                        className="flex items-center gap-3 p-3 bg-zinc-800/50 rounded-lg border border-zinc-700/50"
+                      >
+                        <div className="w-8 h-8 flex-shrink-0 rounded-lg bg-zinc-700 flex items-center justify-center text-blue-400">
+                          {getPortfolioIcon(item.type)}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-white font-medium text-sm truncate">
+                            {item.title}
+                          </p>
+                          <p className="text-zinc-400 text-xs">
+                            {item.artist && `${item.artist} • `}
+                            {item.type}
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-1 text-zinc-500 text-xs flex-shrink-0">
+                          <Calendar className="w-3 h-3" />
+                          {item.year}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Hire Button */}
+              <button
+                onClick={onHire}
+                className="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold py-3 rounded-xl transition-colors mt-auto"
+              >
+                Hire {talent.name.split(' ')[0]}
+              </button>
+            </div>
           </div>
         </div>
       </motion.div>
