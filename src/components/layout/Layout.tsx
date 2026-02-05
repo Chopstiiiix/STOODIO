@@ -26,7 +26,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                             Sign In
                         </button>
                         <button className="bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium px-4 py-2 rounded-full transition-all shadow-[0_0_15px_-3px_rgba(59,130,246,0.5)] hover:shadow-[0_0_20px_-3px_rgba(59,130,246,0.7)]">
-                            List Property
+                            Make a Listing
                         </button>
                     </div>
                 </div>
