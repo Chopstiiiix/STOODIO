@@ -1,5 +1,6 @@
-import { motion } from "framer-motion";
-import { Star, MapPin, Users } from "lucide-react";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Star, MapPin, Users, ChevronLeft, ChevronRight } from "lucide-react";
 
 interface StudioProps {
     id: string;
@@ -14,6 +15,24 @@ interface StudioProps {
 }
 
 export function StudioCard({ studio, onBook, onViewGallery, compact = false }: { studio: StudioProps; onBook: () => void; onViewGallery?: () => void; compact?: boolean }) {
+    const images = studio.images && studio.images.length > 0 ? studio.images : [studio.image];
+    const [currentIndex, setCurrentIndex] = useState(0);
+
+    const handlePrev = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+    };
+
+    const handleNext = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+    };
+
+    const handleDotClick = (e: React.MouseEvent, index: number) => {
+        e.stopPropagation();
+        setCurrentIndex(index);
+    };
+
     return (
         <motion.div
             whileHover={{ y: -5 }}
@@ -24,17 +43,55 @@ export function StudioCard({ studio, onBook, onViewGallery, compact = false }: {
                 className="aspect-[4/3] relative overflow-hidden cursor-pointer"
                 onClick={onViewGallery}
             >
-                <img
-                    src={studio.image}
-                    alt={studio.name}
-                    className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/80 to-transparent" />
-                {studio.images && studio.images.length > 1 && (
-                    <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-sm text-white text-xs font-medium px-2 py-1 rounded-md">
-                        +{studio.images.length - 1} photos
+                <AnimatePresence mode="wait">
+                    <motion.img
+                        key={currentIndex}
+                        src={images[currentIndex]}
+                        alt={studio.name}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="object-cover w-full h-full absolute inset-0"
+                    />
+                </AnimatePresence>
+                <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/80 to-transparent pointer-events-none" />
+
+                {/* Navigation Arrows - show on hover when multiple images */}
+                {images.length > 1 && (
+                    <>
+                        <button
+                            onClick={handlePrev}
+                            className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/70 z-10"
+                        >
+                            <ChevronLeft className="w-5 h-5 text-white" />
+                        </button>
+                        <button
+                            onClick={handleNext}
+                            className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/70 z-10"
+                        >
+                            <ChevronRight className="w-5 h-5 text-white" />
+                        </button>
+                    </>
+                )}
+
+                {/* Photo Indicator Dots */}
+                {images.length > 1 && (
+                    <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+                        {images.map((_, index) => (
+                            <button
+                                key={index}
+                                onClick={(e) => handleDotClick(e, index)}
+                                className={`w-1.5 h-1.5 rounded-full transition-all ${
+                                    index === currentIndex
+                                        ? 'bg-white w-3'
+                                        : 'bg-white/50 hover:bg-white/75'
+                                }`}
+                            />
+                        ))}
                     </div>
                 )}
+
                 <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between">
                     <span className="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded-md">
                         {studio.type}
